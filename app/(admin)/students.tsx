@@ -10,6 +10,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { supabase } from '@/services/supabase';
 import AdminBottomBar from '@/components/AdminBottomBar';
+import TennisLoading from '@/components/common/TennisLoading';
 import { colors, spacing, borderRadius } from '@/theme';
 
 export default function AdminStudentsScreen() {
@@ -46,7 +47,7 @@ export default function AdminStudentsScreen() {
         );
     }, [students, searchQuery]);
 
-    if (!isLoaded) return <View style={{ flex: 1, backgroundColor: colors.background }} />;
+    if (!isLoaded) return <TennisLoading />;
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>

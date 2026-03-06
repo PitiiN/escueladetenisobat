@@ -14,6 +14,7 @@ import {
 } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { supabase } from '@/services/supabase';
+import TennisLoading from '@/components/common/TennisLoading';
 import { useAlertStore } from '@/store/alert.store';
 import { colors, spacing, borderRadius } from '@/theme';
 
@@ -169,7 +170,7 @@ export default function AdminDashboard() {
         { icon: 'card', label: 'Ingresos mes actual', value: new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(stats.revenue), color: colors.accent[500] },
     ];
 
-    if (!isLoaded) return <View style={{ flex: 1, backgroundColor: colors.background }} />;
+    if (!isLoaded) return <TennisLoading />;
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>

@@ -14,6 +14,7 @@ import { es } from 'date-fns/locale';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/services/supabase';
 import { enrollmentsService } from '@/services/enrollments.service';
+import TennisLoading from '@/components/common/TennisLoading';
 import { useAlertStore } from '@/store/alert.store';
 import { colors, spacing, borderRadius } from '@/theme';
 
@@ -184,7 +185,7 @@ export default function HomeScreen() {
     const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
     const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
 
-    if (!isLoaded) return <View style={{ flex: 1, backgroundColor: colors.background }} />;
+    if (!isLoaded) return <TennisLoading />;
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>

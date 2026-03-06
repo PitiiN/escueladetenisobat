@@ -11,6 +11,7 @@ import { es } from 'date-fns/locale';
 import { supabase } from '@/services/supabase';
 import { useAuth } from '@/hooks/useAuth';
 import AdminBottomBar from '@/components/AdminBottomBar';
+import TennisLoading from '@/components/common/TennisLoading';
 import { notificationsService } from '@/services/notifications.service';
 import { useAlertStore } from '@/store/alert.store';
 import { colors, spacing, borderRadius } from '@/theme';
@@ -197,7 +198,7 @@ export default function AdminFinanceScreen() {
         return 'Rechazado';
     };
 
-    if (!isLoaded) return <View style={{ flex: 1, backgroundColor: colors.background }} />;
+    if (!isLoaded) return <TennisLoading />;
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
