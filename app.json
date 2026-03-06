@@ -29,6 +29,9 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "updates": {
+      "enabled": false
+    },
     "plugins": [
       "expo-router",
       "expo-secure-store",
