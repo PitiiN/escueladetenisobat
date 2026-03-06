@@ -7,10 +7,14 @@ const ExpoSecureStoreAdapter = {
     removeItem: (key: string) => SecureStore.deleteItemAsync(key),
 };
 
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+if (!supabaseUrl || !supabaseAnonKey) {
+    console.error('Supabase URL and Anon Key are required. Check environment variables.');
+}
+
+export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '', {
     auth: {
         storage: ExpoSecureStoreAdapter,
         autoRefreshToken: true,

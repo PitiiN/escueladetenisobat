@@ -40,7 +40,8 @@
         {
           "photosPermission": "La app necesita acceso a tus fotos para cambiar tu avatar."
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
