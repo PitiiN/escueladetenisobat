@@ -77,7 +77,7 @@ function AuthGate() {
         if (initializing) return;
 
         const inAuthGroup = segments[0] === '(auth)';
-        const isRoot = segments.length === 0;
+        const isRoot = segments.length === 0 || (segments.length === 1 && segments[0] === '');
 
         if (!session && !inAuthGroup && !isRoot) {
             router.replace('/(auth)/login');
@@ -94,7 +94,11 @@ function AuthGate() {
         );
     }
 
-    return <Slot />;
+    return (
+        <View style={{ flex: 1, backgroundColor: colors.background }}>
+            <Slot />
+        </View>
+    );
 }
 
 export default function RootLayout() {
