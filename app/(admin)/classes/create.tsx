@@ -21,8 +21,8 @@ export default function AdminCreateClassScreen() {
 
     // Form state
     const [title, setTitle] = useState('');
-    const [selectedDate, setSelectedDate] = useState(date ? new Date(date) : new Date());
-    const [calendarMonth, setCalendarMonth] = useState(date ? new Date(date) : new Date());
+    const [selectedDate, setSelectedDate] = useState(date ? new Date(date + 'T00:00:00') : new Date());
+    const [calendarMonth, setCalendarMonth] = useState(date ? new Date(date + 'T00:00:00') : new Date());
     const [selectedHour, setSelectedHour] = useState<number | null>(hour ? parseInt(hour) : null);
     const [maxStudents, setMaxStudents] = useState('6');
     const [selectedCourt, setSelectedCourt] = useState<any>(null);
@@ -74,9 +74,11 @@ export default function AdminCreateClassScreen() {
         if (!selectedCourt) { useAlertStore.getState().showAlert('Error', 'Selecciona una cancha'); return; }
         if (!selectedCategory) { useAlertStore.getState().showAlert('Error', 'Selecciona una categoría'); return; }
 
-        const dateStr = format(selectedDate, 'yyyy-MM-dd');
-        const startDatetime = `${dateStr} ${String(selectedHour).padStart(2, '0')}:00:00`;
-        const endDatetime = `${dateStr} ${String(selectedHour + 1).padStart(2, '0')}:00:00`;
+        const startDatetime = new Date(selectedDate);
+        startDatetime.setHours(selectedHour, 0, 0, 0);
+
+        const endDatetime = new Date(selectedDate);
+        endDatetime.setHours(selectedHour + 1, 0, 0, 0);
 
         setSubmitting(true);
         const { data, error } = await supabase.from('classes').insert({
@@ -85,8 +87,8 @@ export default function AdminCreateClassScreen() {
             category_id: selectedCategory.id,
             court_id: selectedCourt.id,
             coach_id: selectedCoach?.id || null,
-            start_datetime: startDatetime,
-            end_datetime: endDatetime,
+            start_datetime: startDatetime.toISOString(),
+            end_datetime: endDatetime.toISOString(),
             max_students: parseInt(maxStudents) || 6,
             price: 0,
             status: 'scheduled',
@@ -182,7 +184,7 @@ export default function AdminCreateClassScreen() {
 
                 {/* Court */}
                 <Text style={styles.label}>Cancha</Text>
-                <View style={styles.chipRow}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
                     {courts.map((court) => (
                         <TouchableOpacity
                             key={court.id}
@@ -194,11 +196,11 @@ export default function AdminCreateClassScreen() {
                             </Text>
                         </TouchableOpacity>
                     ))}
-                </View>
+                </ScrollView>
 
                 {/* Category */}
                 <Text style={styles.label}>Categoría</Text>
-                <View style={styles.chipRow}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
                     {categories.map((cat) => (
                         <TouchableOpacity
                             key={cat.id}
@@ -216,7 +218,7 @@ export default function AdminCreateClassScreen() {
                             </Text>
                         </TouchableOpacity>
                     ))}
-                </View>
+                </ScrollView>
 
                 {/* Coach */}
                 <Text style={styles.label}>Profesor</Text>

@@ -49,7 +49,7 @@ export default function AdminEditClassScreen() {
             .select(`
         *, courts (name), 
         profiles!classes_coach_id_fkey (id, full_name),
-        class_categories (name, color)
+        class_categories (id, name, color)
       `)
             .eq('id', id)
             .single();
@@ -244,7 +244,7 @@ export default function AdminEditClassScreen() {
 
                 {/* Category Selection */}
                 <Text style={styles.label}>Categoría</Text>
-                <View style={styles.chipRow}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
                     {categories.map((cat) => (
                         <TouchableOpacity
                             key={cat.id}
@@ -262,7 +262,7 @@ export default function AdminEditClassScreen() {
                             </Text>
                         </TouchableOpacity>
                     ))}
-                </View>
+                </ScrollView>
 
                 {/* Coach Selection */}
                 <Text style={styles.label}>Profesor</Text>

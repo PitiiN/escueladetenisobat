@@ -90,7 +90,7 @@ function AuthGate() {
         if (initializing) return;
 
         const inAuthGroup = segments[0] === '(auth)';
-        const isRoot = segments.length === 0 || (segments.length === 1 && segments[0] === '');
+        const isRoot = segments.length === 0 || (segments[0] as string) === '';
 
         if (!session && !inAuthGroup && !isRoot) {
             router.replace('/(auth)/login');
