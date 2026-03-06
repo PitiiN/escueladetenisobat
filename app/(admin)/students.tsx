@@ -21,6 +21,7 @@ export default function AdminStudentsScreen() {
     const [selectedStudent, setSelectedStudent] = useState<any>(null);
     const [studentEnrollments, setStudentEnrollments] = useState<any[]>([]);
     const [loadingEnrollments, setLoadingEnrollments] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     const load = useCallback(async () => {
         const { data } = await supabase
@@ -30,6 +31,7 @@ export default function AdminStudentsScreen() {
             .order('full_name', { ascending: true });
 
         if (data) setStudents(data);
+        setIsLoaded(true);
     }, []);
 
     useEffect(() => { load(); }, [load]);
@@ -43,6 +45,8 @@ export default function AdminStudentsScreen() {
             (s.email || '').toLowerCase().includes(q)
         );
     }, [students, searchQuery]);
+
+    if (!isLoaded) return <View style={{ flex: 1, backgroundColor: colors.background }} />;
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>

@@ -24,6 +24,7 @@ export default function AdminReviewsScreen() {
     const [selectedReview, setSelectedReview] = useState<any>(null);
     const [showReplyModal, setShowReplyModal] = useState(false);
     const [replyText, setReplyText] = useState('');
+    const [isLoaded, setIsLoaded] = useState(false);
 
     const load = useCallback(async () => {
         const { data } = await supabase
@@ -34,6 +35,7 @@ export default function AdminReviewsScreen() {
         if (data) {
             setReviews(data);
         }
+        setIsLoaded(true);
     }, []);
 
     const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
@@ -88,6 +90,8 @@ export default function AdminReviewsScreen() {
             load();
         }
     };
+
+    if (!isLoaded) return <View style={{ flex: 1, backgroundColor: colors.background }} />;
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>

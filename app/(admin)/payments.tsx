@@ -27,6 +27,7 @@ export default function AdminFinanceScreen() {
     const [receipts, setReceipts] = useState<any[]>([]);
     const [refreshing, setRefreshing] = useState(false);
     const [stats, setStats] = useState({ pending: 0, approved: 0, total: 0 });
+    const [isLoaded, setIsLoaded] = useState(false);
 
     // Filters
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
@@ -55,6 +56,7 @@ export default function AdminFinanceScreen() {
             .order('created_at', { ascending: false });
 
         if (data) setReceipts(data);
+        setIsLoaded(true);
     }, []);
 
     useEffect(() => { load(); }, [load]);
@@ -194,6 +196,8 @@ export default function AdminFinanceScreen() {
         if (s === 'approved') return 'Aprobado';
         return 'Rechazado';
     };
+
+    if (!isLoaded) return <View style={{ flex: 1, backgroundColor: colors.background }} />;
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>

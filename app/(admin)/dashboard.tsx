@@ -32,6 +32,7 @@ export default function AdminDashboard() {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [classes, setClasses] = useState<any[]>([]);
     const [refreshing, setRefreshing] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     // Days for the current month carousel
     const monthStart = startOfMonth(currentMonth);
@@ -66,6 +67,7 @@ export default function AdminDashboard() {
             .order('start_datetime');
 
         if (classesData) setClasses(classesData);
+        setIsLoaded(true);
     }, [selectedDate]);
 
     useFocusEffect(
@@ -166,6 +168,8 @@ export default function AdminDashboard() {
         { icon: 'people', label: 'Alumnos activos', value: stats.activeStudents, color: colors.secondary[500] },
         { icon: 'card', label: 'Ingresos mes actual', value: new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(stats.revenue), color: colors.accent[500] },
     ];
+
+    if (!isLoaded) return <View style={{ flex: 1, backgroundColor: colors.background }} />;
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>

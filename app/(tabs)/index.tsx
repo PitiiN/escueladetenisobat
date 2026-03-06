@@ -35,6 +35,7 @@ export default function HomeScreen() {
     const [modalVisible, setModalVisible] = useState(false);
     const [enrolling, setEnrolling] = useState(false);
     const [allowance, setAllowance] = useState<any>(null);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     // Days for the current month
     const monthStart = startOfMonth(currentMonth);
@@ -62,8 +63,11 @@ export default function HomeScreen() {
 
     useFocusEffect(
         useCallback(() => {
-            loadClasses();
-            loadAllowance();
+            const init = async () => {
+                await Promise.all([loadClasses(), loadAllowance()]);
+                setIsLoaded(true);
+            };
+            init();
         }, [loadClasses, loadAllowance])
     );
 
@@ -179,6 +183,8 @@ export default function HomeScreen() {
 
     const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
     const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
+
+    if (!isLoaded) return <View style={{ flex: 1, backgroundColor: colors.background }} />;
 
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
