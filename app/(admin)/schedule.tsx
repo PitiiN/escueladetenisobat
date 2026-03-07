@@ -41,8 +41,8 @@ export default function AdminScheduleScreen() {
         const { data } = await supabase
             .from('classes_with_availability')
             .select('*')
-            .gte('start_datetime', dateStr + 'T00:00:00')
-            .lte('start_datetime', dateStr + 'T23:59:59')
+            .gte('start_datetime', startOfDay(selectedDate).toISOString())
+            .lte('start_datetime', endOfDay(selectedDate).toISOString())
             .order('start_datetime');
         if (data) setClasses(data);
     }, [selectedDate]);

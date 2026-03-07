@@ -122,7 +122,7 @@ export default function AdminDashboard() {
                     text: 'Crear Clase',
                     onPress: () => router.push({
                         pathname: '/(admin)/classes/create',
-                        params: { hour: String(hour), date: selectedDate.toISOString() }
+                        params: { hour: String(hour), date: format(selectedDate, 'yyyy-MM-dd') }
                     } as any)
                 }
             ]
@@ -140,9 +140,10 @@ export default function AdminDashboard() {
             return;
         }
 
-        const dateStr = format(selectedDate, 'yyyy-MM-dd');
-        const startDatetime = `${dateStr}T${String(hour).padStart(2, '0')}:00:00`;
-        const endDatetime = `${dateStr}T${String(hour + 1).padStart(2, '0')}:00:00`;
+        const startDatetime = new Date(selectedDate);
+        startDatetime.setHours(hour, 0, 0, 0);
+        const endDatetime = new Date(selectedDate);
+        endDatetime.setHours(hour + 1, 0, 0, 0);
 
         const { error } = await supabase.from('classes').insert({
             title: 'Bloqueado',
@@ -151,8 +152,8 @@ export default function AdminDashboard() {
             category_id: cat.id,
             court_id: court.id,
             coach_id: user.id,
-            start_datetime: startDatetime,
-            end_datetime: endDatetime,
+            start_datetime: startDatetime.toISOString(),
+            end_datetime: endDatetime.toISOString(),
             max_students: 0,
             price: 0,
         });

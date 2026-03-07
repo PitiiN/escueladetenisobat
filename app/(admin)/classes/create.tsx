@@ -21,8 +21,12 @@ export default function AdminCreateClassScreen() {
 
     // Form state
     const [title, setTitle] = useState('');
-    const [selectedDate, setSelectedDate] = useState(date ? new Date(date + 'T00:00:00') : new Date());
-    const [calendarMonth, setCalendarMonth] = useState(date ? new Date(date + 'T00:00:00') : new Date());
+    const initialDate = date
+        ? (date.includes('T') ? new Date(date) : new Date(date + 'T00:00:00'))
+        : new Date();
+
+    const [selectedDate, setSelectedDate] = useState(initialDate);
+    const [calendarMonth, setCalendarMonth] = useState(initialDate);
     const [selectedHour, setSelectedHour] = useState<number | null>(hour ? parseInt(hour) : null);
     const [maxStudents, setMaxStudents] = useState('6');
     const [selectedCourt, setSelectedCourt] = useState<any>(null);
