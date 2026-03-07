@@ -8,7 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
     format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval,
-    isSameDay, isToday,
+    isSameDay, isToday, startOfDay, endOfDay,
 } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { supabase } from '@/services/supabase';
@@ -58,7 +58,7 @@ export default function AdminScheduleScreen() {
     // Al pinchar un bloque de clase, vamos a la vista de edición de la clase
     // donde el admin puede ver los alumnos inscritos, borrar o añadir.
     const openClassDetail = (cls: any) => {
-        router.push(`/(admin)/classes/${cls.id}`);
+        router.push(`/(admin)/classes/${cls.id}` as any);
     };
 
     // Get class for a specific hour
