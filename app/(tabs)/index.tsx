@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useFocusEffect } from 'expo-router';
 import {
     View, Text, StyleSheet, ScrollView, TouchableOpacity,
@@ -37,6 +37,7 @@ export default function HomeScreen() {
     const [enrolling, setEnrolling] = useState(false);
     const [allowance, setAllowance] = useState<any>(null);
     const [isLoaded, setIsLoaded] = useState(false);
+    const dayStripRef = useRef<ScrollView>(null);
 
     // Days for the current month
     const monthStart = startOfMonth(currentMonth);
@@ -185,6 +186,21 @@ export default function HomeScreen() {
     const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
     const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
 
+    // Scroll to selected date
+    useEffect(() => {
+        if (dayStripRef.current && daysInMonth.length > 0) {
+            const index = daysInMonth.findIndex(d => isSameDay(d, selectedDate));
+            if (index !== -1) {
+                // Approximate width: 48 (item) + 6 (gap) = 54
+                // We center it roughly by subtracting some offset
+                const offset = Math.max(0, index * 54 - 150);
+                setTimeout(() => {
+                    dayStripRef.current?.scrollTo({ x: offset, animated: true });
+                }, 100);
+            }
+        }
+    }, [selectedDate, currentMonth]);
+
     if (!isLoaded) return <TennisLoading />;
 
     return (
@@ -208,6 +224,7 @@ export default function HomeScreen() {
 
                 {/* Day carousel */}
                 <ScrollView
+                    ref={dayStripRef}
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     style={styles.dayStrip}

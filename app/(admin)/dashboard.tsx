@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import {
     View, Text, StyleSheet, ScrollView, TouchableOpacity,
     RefreshControl,
@@ -34,6 +34,7 @@ export default function AdminDashboard() {
     const [classes, setClasses] = useState<any[]>([]);
     const [refreshing, setRefreshing] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
+    const dayStripRef = useRef<ScrollView>(null);
 
     // Days for the current month carousel
     const monthStart = startOfMonth(currentMonth);
@@ -106,6 +107,20 @@ export default function AdminDashboard() {
 
     const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
     const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
+
+    // Scroll to selected date
+    useEffect(() => {
+        if (dayStripRef.current && daysInMonth.length > 0) {
+            const index = daysInMonth.findIndex(d => isSameDay(d, selectedDate));
+            if (index !== -1) {
+                // Approximate width: 44 (item) + 6 (gap) = 50
+                const offset = Math.max(0, index * 50 - 150);
+                setTimeout(() => {
+                    dayStripRef.current?.scrollTo({ x: offset, animated: true });
+                }, 100);
+            }
+        }
+    }, [selectedDate, currentMonth]);
 
     const handleEmptyBlockClick = (hour: number) => {
         useAlertStore.getState().showAlert(
@@ -216,6 +231,7 @@ export default function AdminDashboard() {
                     </View>
 
                     <ScrollView
+                        ref={dayStripRef}
                         horizontal
                         showsHorizontalScrollIndicator={false}
                         style={styles.dayStrip}

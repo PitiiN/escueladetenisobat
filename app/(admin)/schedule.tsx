@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import {
     View, Text, StyleSheet, ScrollView, TouchableOpacity,
     RefreshControl
@@ -29,6 +29,7 @@ export default function AdminScheduleScreen() {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [classes, setClasses] = useState<any[]>([]);
     const [refreshing, setRefreshing] = useState(false);
+    const dayStripRef = useRef<ScrollView>(null);
 
     // Days for the current month
     const monthStart = startOfMonth(currentMonth);
@@ -72,6 +73,20 @@ export default function AdminScheduleScreen() {
     const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
     const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
 
+    // Scroll to selected date
+    useEffect(() => {
+        if (dayStripRef.current && daysInMonth.length > 0) {
+            const index = daysInMonth.findIndex(d => isSameDay(d, selectedDate));
+            if (index !== -1) {
+                // Approximate width: 48 (item) + 6 (gap) = 54
+                const offset = Math.max(0, index * 54 - 150);
+                setTimeout(() => {
+                    dayStripRef.current?.scrollTo({ x: offset, animated: true });
+                }, 100);
+            }
+        }
+    }, [selectedDate, currentMonth]);
+
     return (
         <View style={[styles.container, { paddingTop: insets.top }]}>
             <View style={styles.header}>
@@ -103,6 +118,7 @@ export default function AdminScheduleScreen() {
 
                 {/* Day carousel */}
                 <ScrollView
+                    ref={dayStripRef}
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     style={styles.dayStrip}

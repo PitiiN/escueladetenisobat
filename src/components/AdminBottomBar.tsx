@@ -38,7 +38,7 @@ export default function AdminBottomBar() {
                                 styles.tab,
                                 isActive && styles.activeTab
                             ]}
-                            onPress={() => router.replace(tab.href as any)}
+                            onPress={() => router.push(tab.href as any)}
                         >
                             <Ionicons
                                 name={tab.icon as any}

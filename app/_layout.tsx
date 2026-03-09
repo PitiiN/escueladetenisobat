@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Slot, useRouter, useSegments } from 'expo-router';
+import { Stack, useRouter, useSegments } from 'expo-router';
 import { ThemeProvider, DarkTheme } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -109,7 +109,7 @@ function AuthGate() {
 
     return (
         <View style={{ flex: 1, backgroundColor: colors.background }}>
-            <Slot />
+            <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }} />
         </View>
     );
 }
